@@ -1,1 +1,1 @@
-worker: python Riprova.py
+web: python Riprova.py
