@@ -1,1 +1,1 @@
-web: python Riprova.py
+web: python bot.py
