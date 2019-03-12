@@ -1,1 +1,1 @@
-worker: python "Riprova.py" 
+worker: python Riprova.py
