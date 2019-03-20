@@ -34,7 +34,7 @@ def handle(msg):
             user_state = 2
         elif user_state == 2:
             routes_search = msg['text']
-            with open("C:/Users/Andrea/Desktop/Nuova/routes.txt", newline="") as filecsv:
+            with open("./routes.txt", newline="") as filecsv:
                 lettore = csv.reader(filecsv,delimiter=",")
                 #filtro dati adriabus che
                 dati = [(riga[0]) for riga in lettore if riga[1] == "ADRIABUS" and riga[2] == routes_search]
@@ -42,18 +42,18 @@ def handle(msg):
                 route_id = dati[0]
                 print(route_id)
                 #filtra file trips.txt ricavi trip_id
-            with open("C:/Users/Andrea/Desktop/Nuova/trips.txt", newline="") as filecsv:
+            with open("./trips.txt", newline="") as filecsv:
                 lettore = csv.reader(filecsv,delimiter=",")
                 dati1 = [(riga[1]) for riga in lettore if riga[0] == route_id]
                 print(dati1)
 
         #stoptimes.txt stop_id
-            with open("C:/Users/Andrea/Desktop/Nuova/stop_times.txt", newline="") as filecsv:
+            with open("./stop_times.txt", newline="") as filecsv:
                 lettore = csv.reader(filecsv,delimiter=",")
                 dati2 = [(riga[3]) for riga in lettore if (riga[0] in dati1)]
                 print(dati2)
         #stop_id stops.txt prendo latitudine e longitudine
-            with open("C:/Users/Andrea/Desktop/Nuova/stops.txt", newline="") as filecsv:
+            with open("./stops.txt", newline="") as filecsv:
                 lettore = csv.reader(filecsv,delimiter=",")
                 global dati3
                 dati3 = [(riga[2],riga[3],riga[1]) for riga in lettore if (riga[0] in dati2)]
