@@ -21,6 +21,7 @@ dati2 =[()]
 dati3 =[()]
 dati4 =[]
 user_state = 0
+myresult = []
 def handle(msg):
     cnx = mysql.connector.connect(user='root', password='doremi666', host='localhost', database='mydb')
     mycursor = cnx.cursor()
@@ -33,6 +34,7 @@ def handle(msg):
     global dati2
     global dati3
     global user_state
+    global myresult
     content_type, chat_type, chat_id = telepot.glance(msg)
     if content_type == "text":
         msgg = json.dumps(msg, indent=4)
@@ -54,10 +56,67 @@ def handle(msg):
                 lettore = csv.reader(filecsv,delimiter=",")
                 #filtro dati adriabus che
                 print("SELECT routes.route_id from routes where routes.agency_id = 'ADRIABUS' and routes.route_short_name = "+routes_search+"")
-                mycursor.execute("SELECT routes.route_id, trips.trip_id, stop_times.stop_id from routes, trips, stop_times where routes.agency_id = 'ADRIABUS' and routes.route_short_name = \'"+str(routes_search)+"\' and  trips.route_id = routes.route_id and stop_times.trip_id = trips.trip_id")
+                mycursor.execute("SELECT DISTINCT stop_times.stop_id from routes, trips, stop_times where routes.agency_id = 'ADRIABUS' and routes.route_short_name = \'"+str(routes_search)+"\' and  trips.route_id = routes.route_id and stop_times.trip_id = trips.trip_id")
                 myresult = mycursor.fetchall()
-                for x in myresult:
-                    bot.sendMessage(chat_id, x[0])
+                bot.sendMessage(chat_id, "Mandami la tua posizione per la fermata più vicina!")
+                user_state = 3
+#stop_id stops.txt prendo latitudine e longitudine
+    elif content_type == 'location' and \
+            user_state == 3:
+            latitude = float(msg["location"]["latitude"])
+            longitude = float(msg["location"]["longitude"])
+            i = 0
+            for x in myresult:
+                mycursor.execute("SELECT stops.stop_lat, stops.stop_lon from stops where stops.stop_id = \'"+x[0]+"\'")
+                newresult = mycursor.fetchall()
+                latitude_2 = float(newresult[0][0])
+                longitude_2 = float(newresult[0][1])
+                if i == 0:
+                    min = math.sqrt((latitude_2-latitude)**2 + (longitude_2-longitude)**2)
+                    fermata_giusta = newresult
+                    i = i+1
+                else:
+                    temp = math.sqrt((latitude_2-latitude)**2 + (longitude_2-longitude)**2)
+                    if temp < min:
+                        min = temp
+                        fermata_giusta = newresult
+
+
+            origins = str(latitude)+","+str(longitude)
+            destinations = str(float(fermata_giusta[0][0]))+","+str(float(fermata_giusta[0][1]))
+            mode = 'walking'
+
+            URL = str("https://maps.googleapis.com/maps/api/distancematrix/json?origins="+str(origins)+"&destinations="+str(destinations)+"&mode="+mode+"&key="+API_KEY)
+            r = requests.get(url = URL)
+            data = r.json()
+            #data = json.dumps(data, indent=4)
+            #data = json.dumps(r.json(), indent=2, sort_keys=True)
+
+            print(data["rows"])
+            distance = data["rows"][0]["elements"][0]["distance"]["text"]
+            duration = data["rows"][0]["elements"][0]["duration"]["text"]
+            #filehandle = urllib.request.urlopen(URL)
+            # global dati4
+            # for dato in dati2:
+            #     for dato1 in dati1:
+            #         if(dato1 in dato[0] and fermata_giusta[3] in dato[3]):
+            #             dati4.append(dato[1])
+            #
+            # print(dati4)
+
+            # i = 0
+            # for dato in dati1:
+            #     if(dati1[i] in dati2 and feramata_giusta[3] in dati2):
+            #         dati4.append(dato)
+            #     if(i+1 < len(dati1)):
+            #         i = i+1
+            #
+            # print (dati4)
+            #destinations: San+Francisco|Victoria+BC
+            bot.sendLocation(chat_id, float(fermata_giusta[0][0]),float(fermata_giusta[0][1]))
+            bot.sendMessage(chat_id, str(fermata_giusta)+" dista: "+distance+" tempo a piedi: "+duration)
+
+
 
 
     cnx.close()
