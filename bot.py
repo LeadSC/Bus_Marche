@@ -20,6 +20,8 @@ dati1 =[()]
 dati2 =[()]
 dati3 =[()]
 dati4 =[]
+count = 0
+count2 = 0
 user_state = 0
 myresult = []
 def handle(msg):
@@ -35,6 +37,8 @@ def handle(msg):
     global dati3
     global user_state
     global myresult
+    global count
+    global count2
     content_type, chat_type, chat_id = telepot.glance(msg)
     if content_type == "text":
         msgg = json.dumps(msg, indent=4)
@@ -50,16 +54,53 @@ def handle(msg):
             user_state == 1:
             bot.sendMessage(chat_id, 'Digita la linea che vuoi cercare...')
             user_state = 2
-        elif user_state == 2:
-            routes_search = msg['text']
-            with open("./routes.txt", newline="") as filecsv:
-                lettore = csv.reader(filecsv,delimiter=",")
-                #filtro dati adriabus che
-                print("SELECT routes.route_id from routes where routes.agency_id = 'ADRIABUS' and routes.route_short_name = "+routes_search+"")
-                mycursor.execute("SELECT DISTINCT stop_times.stop_id from routes, trips, stop_times where routes.agency_id = 'ADRIABUS' and routes.route_short_name = \'"+str(routes_search)+"\' and  trips.route_id = routes.route_id and stop_times.trip_id = trips.trip_id")
-                myresult = mycursor.fetchall()
-                bot.sendMessage(chat_id, "Mandami la tua posizione per la fermata più vicina!")
-                user_state = 3
+        elif (user_state == 2 or user_state == 5) and msg['text'] != "/other":
+
+            bot.sendMessage(chat_id, "Ricerca linea...")
+            routes_search = msg['text'].replace('/','')
+            # with open("./routes.txt", newline="") as filecsv:
+            #     lettore = csv.reader(filecsv,delimiter=",")
+            #     #filtro dati adriabus che
+            print("SELECT routes.route_id from routes where routes.agency_id = 'ADRIABUS' and routes.route_short_name = "+routes_search+"")
+            mycursor.execute("SELECT DISTINCT stop_times.stop_id from routes, trips, stop_times where routes.agency_id = 'ADRIABUS' and routes.route_short_name = \'"+str(routes_search)+"\' and  trips.route_id = routes.route_id and stop_times.trip_id = trips.trip_id")
+            myresult = mycursor.fetchall()
+            bot.sendMessage(chat_id, "Mandami la tua posizione per la fermata più vicina!")
+            user_state = 3
+        elif msg['text'] == "Fermata" and \
+            user_state == 1:
+            mycursor.execute("SELECT DISTINCT routes.route_short_name from routes where routes.agency_id = 'ADRIABUS'")
+            myresult = mycursor.fetchall()
+            i = 0
+            count = 10
+            print(len(myresult))
+            for x in myresult:
+                if count2 <= count:
+                    bot.sendMessage(chat_id, "/"+myresult[count2][0])
+                    count2 = i
+                elif i == (len(myresult) - 1):
+                    bot.sendMessage(chat_id, "/other")
+                    count = count + 10
+                    user_state = 5
+                i = i+1
+        elif msg['text'] == "/other":
+            i = 0
+            for x in myresult:
+                if count2 <= count and count < len(myresult):
+                    bot.sendMessage(chat_id, "/"+myresult[count2][0])
+                    count2 = count2 + 1
+                elif i == (len(myresult) - 1) and count < len(myresult):
+                    bot.sendMessage(chat_id, "/other")
+                    count = count + 10
+                elif count >= len(myresult) and i == (len(myresult) - 1):
+                    bot.sendMessage(chat_id, "Linee terminate")
+
+                i = i+1
+                user_state = 5
+
+
+
+
+
 #stop_id stops.txt prendo latitudine e longitudine
     elif content_type == 'location' and \
             user_state == 3:
