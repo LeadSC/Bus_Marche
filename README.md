@@ -56,8 +56,7 @@ Oltre alle API create da noi, sono state utilizzate delle API di Google per effe
 ------------------------------------
 
 ### Bus_Marche Bot ###
- <div> 
-<a><img src='img/img1.png' height='250' align="left"/></a> 
+
 Bus_Marche è un bot che permette all'utente di cercare la sua linea preferita e conoscerne la fermata più vicina, inoltre l'utente può visualizzare tutte le linee dell'Adriabus filtrate per i comuni. Infine dispone di un piccolo listino prezzi per le tratte ExtraUrbane ed Urbane.
 Questo bot è stato realizzato in Python usando la libreria Telepot. Si interfaccia alle API create da noi ed al database tramite le API.
 
