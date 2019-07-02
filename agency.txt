@@ -1,7 +1,0 @@
-"agency_id","agency_name","agency_url","agency_timezone","agency_lang","agency_phone"
-"FS","Trenitalia","http://www.trenitalia.com","Europe/Rome","it","199-892021"
-"CONTRAM","Contram Mobilita s.c.p.a.","http://www.contrammobilita.it/","Europe/Rome","it","0737-616846"
-"TRASFER","Trasfer Soc. Cons. a.r.l.","http://www.trasfer.eu/","Europe/Rome","it","0734-229400"
-"ADRIABUS","Adriabus spa","http://www.adriabus.eu","Europe/Rome","it","800664332"
-"ATMA","Soc. Consortile A.T.M.A.","http://www.atmaancona.it","Europe/Rome","it",
-"START","Start Spa","http://www.startspa.it","Europe/Rome","it","800443040"
