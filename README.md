@@ -18,6 +18,11 @@ Il progetto Bus_Marche si pone come obbiettivi primari:
 * Ricerca di una linea con la rispettiva fermata più vicina
 * Mostrare i prezzi delle linee Urbane e Extraurbane
 
+### Schema ###
+<p align="center">
+    <img width="460" height="300" src="https://github.com/LeadSC/Bus_Marche/blob/master/img/Schema.jpg">
+ </p>
+
 -----------------------------------------------------
 
 ## Relazione ##
