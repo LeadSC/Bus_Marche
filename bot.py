@@ -210,6 +210,9 @@ class MessageHandler:
                     for dato in self.lista_costi:
                         testo = testo+dato+ " | "
                 bot.sendMessage(chat_id, testo)
+            else:
+                bot.sendMessage(chat_id, 'Opzione non valida')
+                self.send_options(chat_id)
 
 
 
@@ -258,7 +261,10 @@ class MessageHandler:
                 duration = data["rows"][0]["elements"][0]["duration"]["text"]
                 bot.sendLocation(chat_id, float(fermata_giusta[0][0]),float(fermata_giusta[0][1]))
                 bot.sendMessage(chat_id, via+" dista: "+distance+" tempo a piedi: "+duration+"\n /HOME")
-                self.USER_STATE[chat_id] = 0
+
+        else:
+            bot.sendMessage(chat_id, 'NON RICONOSCO IL CARATTERE')
+
 
         cnx.close()
 
