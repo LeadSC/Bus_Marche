@@ -107,7 +107,7 @@ class MessageHandler:
                 except(KeyError):
                     bot.sendMessage(chat_id, 'Errore, fermate non trovate')
 
-            elif input_msg == "/other":
+            elif input_msg == "/other" and self.USER_STATE[chat_id] == 5:
                 i = 0
 
                 for x in self.myresult:
@@ -136,6 +136,7 @@ class MessageHandler:
 
 
             elif self.USER_STATE[chat_id] == 1.3:
+
                 self.lista_costi = []
                 if input_msg == "ExtraUrbane":
 
@@ -187,7 +188,7 @@ class MessageHandler:
                             i = 0
 
                         i = i+1
-                        print(dato)
+                    bot.sendMessage(chat_id, testo)
 
 
                 elif input_msg == "Urbane":
@@ -209,7 +210,9 @@ class MessageHandler:
                             bot.sendMessage(chat_id, 'ERRORE')
                     for dato in self.lista_costi:
                         testo = testo+dato+ " | "
-                bot.sendMessage(chat_id, testo)
+                    bot.sendMessage(chat_id, testo)
+                else:
+                    bot.sendMessage(chat_id, 'Opzione non valida, riprova')
             else:
                 bot.sendMessage(chat_id, 'Opzione non valida')
                 self.send_options(chat_id)
