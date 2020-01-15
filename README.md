@@ -71,6 +71,6 @@ Questo bot è stato realizzato in Python usando la libreria Telepot. Si interfac
 ----------------------------------------------------------
 ### Links e riferimenti ### 
  * Link delle OpenData delle linee dell'autobus: https://www.dati.gov.it/dataset/trasporto-pubblico-locale-gtfs
- 
+ * Link della documentazione dell'api: https://app.swaggerhub.com/apis/Bilashos/api_bus/1.0.0-oas3
 
 
